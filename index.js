@@ -31,9 +31,12 @@ app.get("/api/:date?", function (req, res) {
     res.json({unix: Date.now(), utc: (new Date(Date.now())).toUTCString()});
   }
   
-// to fix: the timestamp is valid even if he receive a date value instead of a timestamp value
-
-  const timeStamp = new Date(parseInt(req.params.date));
+  let timeStamp;
+  if (/^\d+$/.test(req.params.date)) {
+    timeStamp = new Date(parseInt(req.params.date));
+  } else {
+    timeStamp = new Date(req.params.date);
+  }
   const date = new Date(req.params.date);
 
   console.log("timeStamp", timeStamp, "date", date,  "params", req.params.date);
