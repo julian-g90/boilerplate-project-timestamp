@@ -25,6 +25,36 @@ app.get("/api/hello", function (req, res) {
 });
 
 
+app.get("/api/:date?", function (req, res) {
+
+  if (! req.params.date) {
+    res.json({unix: Date.now(), utc: (new Date(Date.now())).toUTCString()});
+  }
+  
+// to fix: the timestamp is valid even if he receive a date value instead of a timestamp value
+
+  const timeStamp = new Date(parseInt(req.params.date));
+  const date = new Date(req.params.date);
+
+  console.log("timeStamp", timeStamp, "date", date,  "params", req.params.date);
+  
+  if (date.toUTCString() === "Invalid Date" && timeStamp.toUTCString() === "Invalid Date") {
+    res.json({
+      "error": "Invalid Date"
+    });
+  } else if (date.toUTCString() === "Invalid Date") {
+    res.json({
+      unix: timeStamp.getTime(),
+      utc: timeStamp.toUTCString()
+    });
+  } else {
+    res.json({
+      unix: date.getTime(),
+      utc: date.toUTCString()
+    });
+  }
+});
+
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
