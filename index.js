@@ -29,7 +29,7 @@ app.get("/api/:date?", function (req, res) {
   let date;
 
   if (!req.params.date) {
-    res.json({
+    return res.json({
       unix: Date.now(),
       utc: new Date().toUTCString()
     });
@@ -40,15 +40,15 @@ app.get("/api/:date?", function (req, res) {
   }
   
   if (!date.getTime()) {
-    res.json({
+    return res.json({
       "error": "Invalid Date"
     });
-  } else {
-    res.json({
-      unix: date.getTime(),
-      utc: date.toUTCString()
-    });
   }
+
+  res.json({
+    unix: date.getTime(),
+    utc: date.toUTCString()
+  });
 
 });
 
